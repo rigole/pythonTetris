@@ -186,6 +186,7 @@ def main():
 def main_menu():
     pass
 
+
     main_menu()  # start game
 
 
