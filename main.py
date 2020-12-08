@@ -174,8 +174,15 @@ def draw_text_middle(text, size, color, surface):
     pass
 
 
-def draw_grid(surface, row, col):
-    pass
+def draw_grid(surface, grid):
+
+    for i in range(len(grid)):
+        for j in range(len(grid[i])):
+            pygame.draw.rect(surface, grid[i][j], (top_left_x + j*block_size, top_left_y + i*block_size, block_size, block_size, 0))
+
+
+    pygame.draw.rect(surface, (255, 0, 0), (top_left_x, top_left_y, play_width, play_height), 4)
+
 
 
 def clear_rows(grid, locked):
@@ -183,17 +190,38 @@ def clear_rows(grid, locked):
 
 
  def draw_next_shape(shape, surface):
-    pass
+     pass
 
 
 
-def draw_window(surface):
-    pass
+
+def draw_window(surface, grid):
+    surface.fill((0, 0, 0))
+
+    pygame.font.init()
+    font = pygame.font.SysFont('comicssans', 60)
+    label = font.render('teris', 1, (255, 255, 255))
+    surface.blit(label, (top_left_x + play_width / 2 - (label.get_width() / 2), 30))
+    draw_grid(surface, grid)
+
+    pygame.display.update()
 
 
 def main():
-    pass
+    locked_positions = {}
+    grid = create_grid(locked_positions)
 
+    change_piece = False
+    run = True
+    current_piece = get_shape()
+    next_piece = get_shape()
+    clock = pygame.time.Clock()
+    fall_time = 0
+
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
 
 def main_menu():
     pass
