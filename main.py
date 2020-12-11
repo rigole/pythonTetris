@@ -18,7 +18,7 @@ represented in order by 0 - 6
 
 pygame.font.init()
 
-# GLOBALS VARS
+# Variables Globales
 s_width = 800
 s_height = 700
 play_width = 300  # meaning 300 // 10 = 30 width per block
@@ -28,7 +28,7 @@ block_size = 30
 top_left_x = (s_width - play_width) // 2
 top_left_y = s_height - play_height
 
-# SHAPE FORMATS
+# formats des formes
 S = [['.....',
       '......',
       '..00..',
@@ -185,7 +185,12 @@ def valid_space(shape, grid):
 
 
 def check_lost(positions):
-    pass
+
+      for pos in positions:
+        x, y = pos ()
+        if y <1 :
+             return  True
+      return False
 
 
 def get_shape():
@@ -246,8 +251,19 @@ def main(win):
     next_piece = get_shape()
     clock = pygame.time.Clock()
     fall_time = 0
+    fall_speed = 0.27
 
-    while run:
+    while run:              #demarrage du jeu
+        grid = create_grid(locked_positions)
+        fall_time += clock.get_rawtime()
+        clock.tick()
+
+        if fall_time/1000 > fall_speed:
+            fall_time = 0
+            current_piece.y += 1
+            if not (valid_space(current_piece, grid)) and current_piece.y > 0:
+                current_piece.y -= 1
+                change_piece = True
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -270,6 +286,12 @@ def main(win):
                     if not (valid_space(current_piece), grid):
                         current_piece.y -= 1
 
+        shape_pos = convert_shape_format(current_piece)
+
+        for i in range(len(shape_pos)):
+            x, y = shape_pos[i]
+            if y > -1:
+                grid[y][x] = current_piece.color
 
         draw_grid(win, grid)
 
