@@ -214,13 +214,26 @@ def draw_grid(surface, grid):
             pygame.draw.line(surface, (128, 128, 128), (sx + j*block_size, sy),  (sx + j * block_size, sy + play_height))
 
 
-
 def clear_rows(grid, locked):
+    pass
 
 
 
- def draw_next_shape(shape, surface):
-     pass
+
+def draw_next_shape(shape, surface):
+     font = pygame.font.SysFont('comicsans', 30)
+     label = font.render('Prochaine Forme', 1, (255, 255, 255))
+     sx = top_left_x + play_width + 50
+     sy = top_left_y + play_height/2 - 100
+     format = shape.shape[shape.rotation % len(shape.shape)]
+
+
+     for i, line in enumerate(format):
+         row = list(line)
+         for j, column in enumerate(row):
+             if column == '0':
+                 pygame.draw.rect(surface, shape.color, (sx + j*block_size, sy + i*block_size, block_size, block_size ), 0)
+     surface.blit(label, (sx + 10, sy - 30))
 
 
 
@@ -242,7 +255,7 @@ def draw_window(surface, grid):
     pygame.draw.rect(surface, (255, 0, 0), (top_left_x, top_left_y, play_width, play_height), 5)
 
     draw_grid(surface, grid)
-    pygame.display.update()
+    #pygame.display.update()
 
 
 def main(win):
@@ -306,7 +319,10 @@ def main(win):
                 next_piece = get_shape()
                 change_piece = False
 
+
         draw_window(win, grid)
+        draw_next_shape(next_piece, win)
+        pygame.display.update()
 
         if check_lost(locked_positions):
              run = False
