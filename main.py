@@ -293,7 +293,19 @@ def main(win):
             if y > -1:
                 grid[y][x] = current_piece.color
 
+        if change_piece:
+            for pos in shape_pos:
+                p = (pos[0], pos[1])
+                locked_positions[p] = current_piece.color
+                current_piece = next_piece
+                next_piece = get_shape()
+                change_piece = False
+
         draw_grid(win, grid)
+
+        if check_lost(locked_positions):
+             run = False
+    pygame.display.quit()
 
 
 def main_menu(win):
