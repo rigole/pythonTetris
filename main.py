@@ -220,7 +220,7 @@ def clear_rows(grid, locked):
         row = grid[i]
         if (0, 0, 0) not in row:
             inc += 1
-            nd = i
+            ind = i
 
             for j in range(len(row)):
                 try:
@@ -228,8 +228,17 @@ def clear_rows(grid, locked):
                 except:
 
                     continue
-#if inc > 0:
-       # for key in sorted(list(locked), key = lambda x: x[1])[::-1]:
+    if inc > 0:
+         for key in sorted(list(locked), key = lambda x: x[1])[::-1]:
+             x, y = key
+             if y < ind:
+                 newKey = (x, y + inc)
+                 locked[newKey] = locked.pop(key)
+
+
+
+
+
 
 
 
@@ -253,7 +262,7 @@ def draw_next_shape(shape, surface):
          row = list(line)
          for j, column in enumerate(row):
              if column == '0':
-                 pygame.draw.rect(surface, shape.color, (sx + j*block_size, sy + i*block_size, block_size, block_size ), 0)
+                 pygame.draw.rect(surface, shape.color, (sx + j*block_size, sy + i*block_size, block_size, block_size), 0)
      surface.blit(label, (sx + 10, sy - 30))
 
 
@@ -290,12 +299,20 @@ def main(win):
     clock = pygame.time.Clock()
     fall_time = 0
     fall_speed = 0.27
+    level_time = 0
+
 
     while run:
         #demarrage du jeu
         grid = create_grid(locked_positions)
         fall_time += clock.get_rawtime()
+        level_time += clock.get_rawtime()
         clock.tick()
+
+        if level_time/1000 > 5:
+            level_time = 0
+            if level_time > 0.12:
+                level_time -= 0.005
 
         if fall_time/1000 > fall_speed:
             fall_time = 0
@@ -339,6 +356,7 @@ def main(win):
                 current_piece = next_piece
                 next_piece = get_shape()
                 change_piece = False
+                clear_rows(grid, locked_positions)
 
 
         draw_window(win, grid)
